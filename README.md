@@ -1,4 +1,4 @@
 # horrible-ui-gdv
-This is an example of horrible form insertion design.
+This is an example of horrible UX. May your sanity remain untouched.
 
-Made as Nuxt project with Tailwind CSS Framework.
+Made via *Nuxt*. Used *Vue* and *Tailwind*.

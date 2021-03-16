@@ -23,11 +23,24 @@
             type="text"
             placeholder="Username"
           />
+          <input
+            v-model="asciiCode"
+            class="shadow appearance-none border border-red rounded py-2 px-3 text-grey-darker mb-3"
+            id="asciiField"
+            type="number"
+            placeholder="ASCII Code"
+          />
           <button
-            class="w-48 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-            @click="userName = generateRandomString(getRandomInteger(4, 20),'ABCDEFGHIJKLMNOPRSTUVabcdefghijklmnopqrstuv')"
+            class="w-10 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            @click="generateUserNameChar()"
           >
-            Username
+            >
+          </button>
+          <button
+            class="w-10 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            @click="userName = ''"
+          >
+            C
           </button>
         </span>
       </div>
@@ -49,7 +62,7 @@
           />
           <button
             class="w-48 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-            @click="passWord = generateRandomString(getRandomInteger(8, 16),'PQRSTUVWXYZpqrstuvwxyz0123456789!@#$%&*')"
+            @click="passWord = generateRandomString(getRandomInteger(4, 20),'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*')"
           >
             Password
           </button>
@@ -80,13 +93,16 @@
         </span>
       </div>
 
-      <label class="flex justify-start items-start mb-2">
+      <label
+        class="check-box-container flex justify-start items-start mb-2"
+        @click="moveCheckboxElement"
+      >
         <div class="bg-white rounded w-6 h-6 flex flex-shrink-0 justify-center items-center mr-1 focus-within:border-blue-500">
-          <input type="checkbox" class="form-checkbox w-5 h-5" />
+          <input type="checkbox" class="form-checkbox w-5 h-5"/>
         </div>
-        <div class="select-none">Remember my sanity</div>
+        <div class="select-none font-semibold">Remember my sanity</div>
       </label>
-      <div class="flex items-center justify-end">
+      <div class="flex items-center justify-end mt-8">
         <a
           class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker mx-4"
           href="/#"
@@ -108,14 +124,23 @@ export default {
       title: "Asylum Identification Center",
       userName: "",
       passWord: "",
+      asciiCode: "",
       idCode: 99999999999,
       isIdGenerating: false,
     };
   },
   mounted() {
     this.generateIdNumber();
+    document.addEventListener('click', event => this.moveCheckboxElement(event));
+  },
+  beforeDestroy() {
+    document.removeEventListener('click', event => this.moveCheckboxElement(event));
   },
   methods: {
+    getRandomPostitionStyle(top, left) {
+      return `position: absolute; top: ${top}px; left: ${left}px;`;
+    },
+
     getRandomInteger(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     },
@@ -130,6 +155,15 @@ export default {
       return string;
     },
 
+    generateUserNameChar() {
+      if (!this.asciiCode || this.asciiCode < 0) {
+        alert('Please Enter a valid ASCII Code');
+      } else {
+        this.userName += String.fromCharCode(this.asciiCode);
+        this.asciiCode = "";
+      }
+    },
+
     async generateIdNumber() {
       await setInterval(() => {
         if (!this.isIdGenerating) {
@@ -139,19 +173,39 @@ export default {
         }
       }, 10);
     },
+
+    moveCheckboxElement(event) {
+      if (!event || !event.target) {
+        return;
+      } else if (event.target.classList.contains('form-checkbox')) {
+        let form = document.querySelector('#form');
+        let checkBoxContainer = document.querySelector('.check-box-container')
+        checkBoxContainer.style = this.getRandomPostitionStyle(this.getRandomInteger(25, (form.offsetHeight - 50)), this.getRandomInteger(25, (form.offsetWidth - 100)));
+      }
+    },
   },
 };
 </script>
 
 <style>
 .container {
-  width: 100vh;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   margin: 25vh auto;
 }
 
 #form {
-  width: 45vh;
+  position: relative;
+  min-width: 25rem;
+  max-width: 30rem;
   margin: 0 auto;
+}
+
+#asciiField {
+  width: 7.5rem;
+}
+
+.check-box-container {
+  position: absolute;
 }
 </style>

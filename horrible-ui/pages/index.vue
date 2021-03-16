@@ -7,7 +7,7 @@
           {{ title }}
         </label>
       </div>
-      <div class="mb-4">
+      <div class="mb-2">
         <label
           class="block text-grey-darker text-sm font-bold mb-2"
           for="username"
@@ -179,8 +179,10 @@ export default {
         return;
       } else if (event.target.classList.contains('form-checkbox')) {
         let form = document.querySelector('#form');
-        let checkBoxContainer = document.querySelector('.check-box-container')
-        checkBoxContainer.style = this.getRandomPostitionStyle(this.getRandomInteger(25, (form.offsetHeight - 50)), this.getRandomInteger(25, (form.offsetWidth - 100)));
+        let checkBox = document.querySelector('.form-checkbox');
+        checkBox.checked = (1 === this.getRandomInteger(1, 5));
+        let checkBoxContainer = document.querySelector('.check-box-container');
+        checkBoxContainer.style = this.getRandomPostitionStyle(this.getRandomInteger(25, (form.offsetHeight - 25)), this.getRandomInteger(25, (form.offsetWidth - 200)));
       }
     },
   },
@@ -205,7 +207,12 @@ export default {
   width: 7.5rem;
 }
 
+.form-checkbox {
+  cursor: pointer;
+}
+
 .check-box-container {
   position: absolute;
+  cursor: pointer;
 }
 </style>
